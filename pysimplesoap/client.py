@@ -13,6 +13,7 @@
 """Pythonic simple SOAP Client implementation"""
 
 from __future__ import unicode_literals
+from datetime import date, datetime
 import sys
 if sys.version > '3':
     unicode = str
@@ -368,7 +369,9 @@ class SoapClient(object):
         if struct == str:
             struct = unicode        # fix for py2 vs py3 string handling
         
-        if not isinstance(struct, (list, dict, tuple)) and struct in TYPE_MAP.keys():
+        if struct == datetime:
+            valid = isinstance(value, date)
+        elif not isinstance(struct, (list, dict, tuple)) and struct in TYPE_MAP.keys():
             try:
                 struct(value)       # attempt to cast input to parameter type
             except:
